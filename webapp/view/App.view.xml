@@ -1,0 +1,322 @@
+<mvc:View controllerName="todo.controller.App"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:layout="sap.ui.layout"
+    xmlns:core="sap.ui.core">
+
+    <App>
+        <Page class="sapUiResponsivePadding" showHeader="false">
+            <VBox class="sapUiSmallMargin">
+                <HBox justifyContent="Center" class="sapUiSmallMarginBottom">
+                    <Title text="{i18n>APP_TITLE}" level="H1" />
+                </HBox>
+
+                <core:HTML content="&lt;hr class=&quot;section-divider&quot;/&gt;" />
+
+                <!-- KPI Panel -->
+                <Panel headerText="{i18n>KPIS_PANEL_TITLE}">
+                    <layout:Grid defaultSpan="L4 M4 S12" width="100%">
+                        <GenericTile
+                            header="{i18n>KPI_OVERDUE_HEADER}"
+                            subheader="{i18n>KPI_OVERDUE_SUBHEADER}"
+                            frameType="TwoByOne"
+                            size="S"
+                            width="100%"
+                            class="centeredTile">
+                            <layoutData>
+                                <layout:GridData span="L4 M4 S12" />
+                            </layoutData>
+                            <TileContent>
+                                <content>
+                                    <NumericContent
+                                        value="{ui>/kpis/overdue}"
+                                        icon="sap-icon://alert"
+                                        valueColor="{= ${ui>/kpis/overdue} > 0 ? 'Error' : 'Good' }"
+                                        withMargin="false"
+                                    />
+                                </content>
+                            </TileContent>
+                        </GenericTile>
+
+                        <GenericTile
+                            header="{i18n>KPI_TODAY_HEADER}"
+                            subheader="{i18n>KPI_TODAY_SUBHEADER}"
+                            frameType="TwoByOne"
+                            size="S"
+                            width="100%"
+                            class="centeredTile">
+                            <layoutData>
+                                <layout:GridData span="L4 M4 S12" />
+                            </layoutData>
+                            <TileContent>
+                                <content>
+                                    <NumericContent
+                                        value="{ui>/kpis/today}"
+                                        icon="sap-icon://customer"
+                                        valueColor="Neutral"
+                                        withMargin="false"
+                                    />
+                                </content>
+                            </TileContent>
+                        </GenericTile>
+
+                        <GenericTile
+                            header="{i18n>KPI_TOMORROW_HEADER}"
+                            subheader="{i18n>KPI_TOMORROW_SUBHEADER}"
+                            frameType="TwoByOne"
+                            size="S"
+                            width="100%"
+                            class="centeredTile">
+                            <layoutData>
+                                <layout:GridData span="L4 M4 S12" />
+                            </layoutData>
+                            <TileContent>
+                                <content>
+                                    <NumericContent
+                                        value="{ui>/kpis/tomorrow}"
+                                        icon="sap-icon://request"
+                                        valueColor="Neutral"
+                                        withMargin="false"
+                                    />
+                                </content>
+                            </TileContent>
+                        </GenericTile>
+                    </layout:Grid>
+                </Panel>
+
+                <!-- Formulário de Criação de Ticket -->
+                <Panel headerText="{i18n>FORM_PANEL_TITLE}" class="sapUiSmallMarginTop">
+                    <layout:Grid defaultSpan="L12 M12 S12" width="100%">
+                        <Input
+                            id="desc"
+                            placeholder="{i18n>INPUT_DESC_PLACEHOLDER}"
+                            maxLength="200"
+                            submit="onAddByEnter"
+                            ariaLabelledBy="descLabel"
+                            class="sapUiTinyMarginBottom"
+                            width="100%"
+                        >
+                            <layoutData>
+                                <layout:GridData span="L12 M12 S12" />
+                            </layoutData>
+                        </Input>
+                        <Label id="descLabel" text="{i18n>INPUT_DESC_LABEL}"
+                            visible="false" />
+
+                        <Select id="priority" selectedKey="__placeholder" change="onPriorityChange"
+                            class="sapUiTinyMarginBottom" ariaLabelledBy="priorityLabel"
+                            width="100%">
+                            <layoutData>
+                                <layout:GridData span="L5 M6 S12" />
+                            </layoutData>
+                            <core:Item key="__placeholder" text="{i18n>SELECT_PRIORITY_PLACEHOLDER}"
+                                enabled="false" />
+                            <core:Item key="C" text="{i18n>PRIORITY_CRITICAL}" />
+                            <core:Item key="H" text="{i18n>PRIORITY_HIGH}" />
+                            <core:Item key="M" text="{i18n>PRIORITY_MEDIUM}" />
+                            <core:Item key="L" text="{i18n>PRIORITY_LOW}" />
+                        </Select>
+                        <Label id="priorityLabel" text="{i18n>PRIORITY_LABEL}" visible="false" />
+
+                        <DatePicker
+                            id="dueDate"
+                            displayFormat="dd/MM/yyyy"
+                            placeholder="{i18n>DATE_PLACEHOLDER}"
+                            class="sapUiTinyMarginBottom" width="100%"
+                            ariaLabelledBy="dueDateLabel"
+                        >
+                            <layoutData>
+                                <layout:GridData span="L3 M6 S12" />
+                            </layoutData>
+                        </DatePicker>
+                        <Label id="dueDateLabel" text="{i18n>DUE_DATE_LABEL}" visible="false" />
+
+                        <Button text="{i18n>BUTTON_CREATE}" icon="sap-icon://add" type="Emphasized"
+                            press="onAddTask">
+                            <layoutData>
+                                <layout:GridData span="L4 M6 S12" />
+                            </layoutData>
+                        </Button>
+                    </layout:Grid>
+                </Panel>
+
+                <!-- Lista de Tickets Abertos -->
+                <List id="openList" headerText="{i18n>LIST_OPEN_HEADER}"
+                    items="{path: 'todo>/tasks'}">
+                    <customData>
+                        <core:CustomData key="ariaRole" value="list" />
+                    </customData>
+
+                    <items>
+                        <CustomListItem>
+                            <HBox alignItems="Center" justifyContent="SpaceBetween" wrap="Wrap">
+                                <HBox alignItems="Center" class="sapUiSmallMarginBegin">
+                                    <layoutData>
+                                        <FlexItemData growFactor="1" />
+                                    </layoutData>
+                                    <core:Icon
+                                        src="{= ${todo>priority} === 'C' ? 'sap-icon://incident' : (${todo>priority} === 'H' ? 'sap-icon://warning' : (${todo>priority} === 'M' ? 'sap-icon://request' : 'sap-icon://message-information')) }"
+                                        size="2rem"
+                                        class="sapUiSmallMarginEnd"
+                                    />
+
+                                    <VBox class="sapUiTinyMarginBottom">
+                                        <HBox alignItems="Center"
+                                            class="sapUiTinyMarginBottom ticket-title">
+                                            <Text text="{todo>description}" wrapping="true"
+                                                width="100%"
+                                                class="{= ${todo>done} ? 'text-done' : '' }" />
+                                        </HBox>
+
+                                        <HBox alignItems="Center" class="sapUiTinyMarginTop">
+                                            <ObjectStatus
+                                                text="{todo>priorityText}"
+                                                state="{= ${todo>priority} === 'C' ? 'Error' : (${todo>priority} === 'H' ? 'Warning' : (${todo>priority} === 'M' ? 'Information' : 'Success')) }"
+                                                icon="{= ${todo>priority} === 'C' ? 'sap-icon://incident' : (${todo>priority} === 'H' ? 'sap-icon://warning' : (${todo>priority} === 'M' ? 'sap-icon://information' : 'sap-icon://complete')) }"
+                                            />
+
+                                            <Text
+                                                text="{= ${i18n>LABEL_DEADLINE} + ' ' + ${todo>dueFormatted} }"
+                                                class="sapUiSmallMarginBegin" />
+
+                                            <ObjectStatus text="{i18n>STATUS_RESOLVED}"
+                                                state="Success"
+                                                icon="sap-icon://complete" visible="{todo>done}"
+                                                class="sapUiSmallMarginBegin" />
+                                        </HBox>
+                                    </VBox>
+                                </HBox>
+
+                                <HBox>
+                                    <layoutData>
+                                        <FlexItemData alignSelf="End" />
+                                    </layoutData>
+
+                                    <Button icon="sap-icon://accept" type="Transparent"
+                                        press="onToggleDone"
+                                        tooltip="{= ${todo>done} ? ${i18n>TOOLTIP_TOGGLE_DONE_REOPEN} : ${i18n>TOOLTIP_TOGGLE_DONE_FINISH} }" />
+
+                                    <Button icon="sap-icon://delete" type="Transparent"
+                                        press="onDeleteTask" tooltip="{i18n>TOOLTIP_DELETE}" />
+                                </HBox>
+                            </HBox>
+                        </CustomListItem>
+                    </items>
+                </List>
+
+                <!-- Ações / Modal de Tickets Finalizados -->
+                <Toolbar class="sapUiSmallMarginTop">
+                    <Title text="{= ${i18n>SECTION_DONE_TITLE} + ' (' + ${ui>/kpis/done} + ')' }"
+                        level="H4" />
+                    <ToolbarSpacer />
+                    <Button text="{i18n>BUTTON_VIEW_DONE}" icon="sap-icon://complete"
+                        press="onOpenDoneDialog" />
+                </Toolbar>
+
+                <!-- Dialog: Tickets Finalizados -->
+                <Dialog
+                    id="doneDialog"
+                    contentHeight="60%"
+                    contentWidth="80%"
+                    resizable="true"
+                    draggable="true"
+                    stretchOnPhone="true"
+                >
+                    <customHeader>
+                        <Bar>
+                            <contentMiddle>
+                                <HBox
+                                    width="100%"
+                                    wrap="Wrap"
+                                >
+                                    <Title
+                                        text="{= ${i18n>DIALOG_DONE_TITLE} + ' (' + ${ui>/kpis/done} + ')' }"
+                                        wrapping="True"
+                                        level="H2"
+                                    />
+                                </HBox>
+                            </contentMiddle>
+
+                            <contentRight>
+                                <Button
+                                    icon="sap-icon://decline"
+                                    type="Transparent"
+                                    press="onCloseDoneDialog"
+                                    tooltip="{i18n>BUTTON_CLOSE}"
+                                />
+                            </contentRight>
+                        </Bar>
+                    </customHeader>
+
+                    <!-- Conteúdo do Dialog -->
+                    <content>
+                        <List
+                            id="doneDialogList"
+                            items="{path: 'todo>/tasks'}"
+                            width="100%"
+                            growing="false"
+                        >
+                            <items>
+                                <CustomListItem>
+                                    <HBox alignItems="Center" justifyContent="SpaceBetween"
+                                        wrap="Wrap">
+                                        <HBox alignItems="Center" class="sapUiSmallMarginBegin">
+                                            <core:Icon
+                                                src="sap-icon://complete"
+                                                size="2rem"
+                                                class="sapUiSmallMarginEnd"
+                                            />
+                                            <VBox>
+                                                <HBox
+                                                    alignItems="Center"
+                                                    class="sapUiTinyMarginBottom ticket-title"
+                                                >
+                                                    <Text text="{todo>description}" wrapping="false" />
+                                                </HBox>
+
+                                                <HBox alignItems="Center" class="sapUiTinyMarginTop">
+                                                    <ObjectStatus
+                                                        text="{i18n>STATUS_RESOLVED}"
+                                                        state="Success"
+                                                        icon="sap-icon://complete"
+                                                    />
+                                                    <Text
+                                                        text="{i18n>STATUS_RESOLVED} {todo>completedFormatted}"
+                                                        class="sapUiSmallMarginBegin"
+                                                    />
+                                                </HBox>
+                                            </VBox>
+                                        </HBox>
+
+                                        <HBox>
+                                            <Button
+                                                icon="sap-icon://redo"
+                                                type="Transparent"
+                                                press="onToggleDone"
+                                                tooltip="{i18n>TOOLTIP_TOGGLE_DONE_REOPEN}"
+                                            />
+                                            <Button
+                                                icon="sap-icon://delete"
+                                                type="Transparent"
+                                                press="onDeleteTask"
+                                                tooltip="{i18n>TOOLTIP_DELETE}"
+                                            />
+                                        </HBox>
+                                    </HBox>
+                                </CustomListItem>
+                            </items>
+                        </List>
+                    </content>
+
+                    <!-- Botão inferior do Dialog -->
+                    <beginButton>
+                        <Button
+                            text="{i18n>BUTTON_CLOSE}"
+                            press="onCloseDoneDialog"
+                        />
+                    </beginButton>
+                </Dialog>
+            </VBox>
+        </Page>
+    </App>
+</mvc:View>
