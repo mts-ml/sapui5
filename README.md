@@ -9,14 +9,21 @@ Aplicação standalone em SAP UI5 (Fiori 3) para gerenciamento de tickets de sup
 
 ## Rodando localmente
 
-1. Instale a CLI (uma vez):
+1. Clone o repositório e entre na pasta do projeto:
+   ```bash
+   git clone https://github.com/mts-ml/sapui5
+   cd "sapui5"
+   ```
+2. Instale a CLI (uma vez):
    ```bash
    npm i -g @ui5/cli
    ```
-2. Na raiz do projeto, execute:
+3. Na raiz do projeto, execute:
    ```bash
    ui5 serve -o index.html
    ```
+
+Observação: se o navegador não abrir automaticamente, copie/acesse o link exibido no terminal (por exemplo, `http://localhost:8080`) e abra o arquivo `index.html`.
 
 ## Estrutura do projeto
 
