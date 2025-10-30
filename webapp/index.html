@@ -7,6 +7,7 @@
       rel="icon"
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎫</text></svg>"
     />
+    <link rel="stylesheet" href="css/styles.css" />
 
     <script
       id="sap-ui-bootstrap"
@@ -17,32 +18,7 @@
       data-sap-ui-async="true"
       data-sap-ui-resourceroots='{"todo": "./"}'
     ></script>
-
-    <style>
-      .text-done {
-        text-decoration: line-through;
-        opacity: 0.6;
-      }
-      html,
-      body {
-        height: 100%;
-        overflow: hidden;
-      }
-      #content {
-        height: 100%;
-        margin: 0;
-      }
-      .section-divider {
-        width: 100%;
-        border: 0;
-        border-top: 1px solid #ddd;
-        margin: 0 0 1rem 0;
-      }
-      .ticket-title {
-        padding-top: 0.5rem;
-      }      
-    </style>
-
+    
     <script>
       sap.ui.getCore().attachInit(function () {
         sap.ui.require(
