@@ -38,6 +38,7 @@ Observação: se o navegador não abrir automaticamente, copie/acesse o link exi
   - `view/App.view.xml` — layout principal (formulário, KPIs, listas, diálogo)
   - `controller/App.controller.js` — lógica de inserção, exclusão, concluir/reabrir, filtros e toasts
   - `i18n/i18n.properties` — textos e rótulos da UI
+  - `css/styles.css` — estilos da aplicação
 
 
 ## Funcionalidades
