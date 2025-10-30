@@ -68,43 +68,33 @@ sap.ui.define(
 
       _recalcKPIs: function () {
         const oModel = this.getModel("todo");
-        const a = oModel.getProperty("/tasks") || [];
+        const aTasks = oModel.getProperty("/tasks") || [];
+
         const today = new Date();
-        const t0 = new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDate()
-        );
-        const t1 = new Date(t0);
-        t1.setDate(t0.getDate() + 1);
+        today.setHours(0, 0, 0, 0);
+
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
 
         let overdue = 0,
           td = 0,
-          tm = 0;
-        let doneCount = 0;
+          tm = 0,
+          doneCount = 0;
 
-        a.forEach(function (task) {
+        aTasks.forEach((task) => {
           if (task.done) {
             doneCount++;
-            return; // concluídas não contam
+            return;
           }
 
-          // contabiliza como urgente se estiver atrasado OU se for crítico
-          const isCritical = task.priority === "C";
           if (task.due) {
             const parts = task.due.split("-"); // YYYY-MM-DD
             const d = new Date(parts[0], parts[1] - 1, parts[2]);
-            if (d < t0) {
-              overdue++;
-            } else if (d.getTime() === t0.getTime()) {
-              td++;
-            } else if (d.getTime() === t1.getTime()) {
-              tm++;
-            }
-          }
+            d.setHours(0, 0, 0, 0);
 
-          if (isCritical) {
-            overdue++;
+            if (d < today) overdue++;
+            else if (d.getTime() === today.getTime()) td++;
+            else if (d.getTime() === tomorrow.getTime()) tm++;
           }
         });
 
