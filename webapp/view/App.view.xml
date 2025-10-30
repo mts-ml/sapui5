@@ -8,7 +8,7 @@
         <Page class="sapUiResponsivePadding" showHeader="false">
             <VBox class="sapUiSmallMargin">
                 <HBox justifyContent="Center" class="sapUiSmallMarginBottom">
-                    <Title text="{i18n>APP_TITLE}" level="H1" />
+                    <Title text="{i18n>APP_TITLE}" level="H1"/>
                 </HBox>
 
                 <core:HTML content="&lt;hr class=&quot;section-divider&quot;/&gt;" />
@@ -52,7 +52,7 @@
                                 <content>
                                     <NumericContent
                                         value="{ui>/kpis/today}"
-                                        icon="sap-icon://customer"
+                                        icon="sap-icon://document-text"
                                         valueColor="Neutral"
                                         withMargin="false"
                                     />
@@ -155,7 +155,7 @@
                                         <FlexItemData growFactor="1" />
                                     </layoutData>
                                     <core:Icon
-                                        src="{= ${todo>priority} === 'C' ? 'sap-icon://incident' : (${todo>priority} === 'H' ? 'sap-icon://warning' : (${todo>priority} === 'M' ? 'sap-icon://request' : 'sap-icon://message-information')) }"
+                                        src="{= ${todo>priority} === 'C' ? 'sap-icon://alert' : (${todo>priority} === 'H' ? 'sap-icon://message-warning' : (${todo>priority} === 'M' ? 'sap-icon://master-task-triangle' : 'sap-icon://project-definition-triangle')) }"
                                         size="2rem"
                                         class="sapUiSmallMarginEnd"
                                     />
@@ -163,16 +163,19 @@
                                     <VBox class="sapUiTinyMarginBottom">
                                         <HBox alignItems="Center"
                                             class="sapUiTinyMarginBottom ticket-title">
-                                            <Text text="{todo>description}" wrapping="true"
+                                            <Text
+                                                text="{todo>description} "
+                                                wrapping="true"
                                                 width="100%"
-                                                class="{= ${todo>done} ? 'text-done' : '' }" />
+                                                class="{= ${todo>done} ? 'text-done' : '' }"
+                                            />
                                         </HBox>
 
                                         <HBox alignItems="Center" class="sapUiTinyMarginTop">
                                             <ObjectStatus
                                                 text="{todo>priorityText}"
                                                 state="{= ${todo>priority} === 'C' ? 'Error' : (${todo>priority} === 'H' ? 'Warning' : (${todo>priority} === 'M' ? 'Information' : 'Success')) }"
-                                                icon="{= ${todo>priority} === 'C' ? 'sap-icon://incident' : (${todo>priority} === 'H' ? 'sap-icon://warning' : (${todo>priority} === 'M' ? 'sap-icon://information' : 'sap-icon://complete')) }"
+                                                icon="{= ${todo>priority} === 'C' ? 'sap-icon://alert' : (${todo>priority} === 'H' ? 'sap-icon://message-warning' : (${todo>priority} === 'M' ? 'sap-icon://master-task-triangle' : 'sap-icon://project-definition-triangle')) }"
                                             />
 
                                             <Text
